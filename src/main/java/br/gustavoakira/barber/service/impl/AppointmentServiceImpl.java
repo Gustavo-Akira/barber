@@ -36,4 +36,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         repository.delete(old);
         return old;
     }
+
+    @Override
+    public Appointment saveAppointment(Appointment appointment) {
+        return repository.save(appointment);
+    }
 }
