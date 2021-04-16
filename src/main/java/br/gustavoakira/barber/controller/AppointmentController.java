@@ -5,6 +5,7 @@ import br.gustavoakira.barber.model.Appointment;
 import br.gustavoakira.barber.service.AppointmentService;
 import br.gustavoakira.barber.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class AppointmentController {
     @PostMapping("appointment/client/{id}")
     public ResponseEntity<Appointment> saveAppointment(@PathVariable Long id,@RequestBody Appointment appointment){
         appointment.setClient(clientService.getClient(id));
-        return ResponseEntity.ok(service.saveAppointment(appointment));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveAppointment(appointment));
     }
 
     @PutMapping("appointment/{id}")
