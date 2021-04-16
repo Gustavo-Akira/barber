@@ -24,4 +24,7 @@ public class Service {
 
     @ManyToMany
     private List<Appointment> appointment;
+
+    @ManyToMany
+    private List<Barber> barbers;
 }

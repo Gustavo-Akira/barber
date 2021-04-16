@@ -21,4 +21,6 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Appointment> appointment;
 
+    @ManyToOne
+    private Barber barber;
 }

@@ -20,6 +20,9 @@ public class Appointment {
     @ManyToOne
     private Client client;
 
+    @ManyToOne
+    private Barber barber;
+
     @ManyToMany
     private List<Service> service;
 
