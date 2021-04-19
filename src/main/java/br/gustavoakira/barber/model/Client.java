@@ -16,11 +16,12 @@ public class Client {
 
     @NotNull
     @NotEmpty
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "client")
     private List<Appointment> appointment;
 
-    @ManyToOne
-    private Barber barber;
+    @ManyToMany
+    private List<Barber> barber;
 }

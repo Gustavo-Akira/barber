@@ -4,9 +4,10 @@ import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.repository.BarberRepository;
 import br.gustavoakira.barber.service.BarberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class BarberServiceImpl implements BarberService {
 
     @Autowired
