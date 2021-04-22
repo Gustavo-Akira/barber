@@ -1,6 +1,8 @@
 package br.gustavoakira.barber.model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,17 +20,20 @@ public class Barber implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private String name;
 
     private String color;
 
     @OneToMany(mappedBy = "barber")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Appointment> appointments;
 
-    @ManyToMany
+    @ManyToMany()
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Service> service = new ArrayList<>();
 
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Client> clients = new ArrayList<>();
 
     @NotNull
@@ -39,7 +44,7 @@ public class Barber implements UserDetails {
     @NotEmpty
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     @Override
