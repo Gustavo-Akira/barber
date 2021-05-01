@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.service.impl;
 
+import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.model.Role;
 import br.gustavoakira.barber.repository.BarberRepository;
@@ -27,7 +28,7 @@ public class BarberServiceImpl implements BarberService {
 
     @Override
     public Barber getBarber(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(()->new ResourceNotFoundException("Barber not found with id = "+id));
     }
 
     @Override

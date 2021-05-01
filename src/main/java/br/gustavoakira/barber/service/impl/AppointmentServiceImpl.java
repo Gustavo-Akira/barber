@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.service.impl;
 
+import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import br.gustavoakira.barber.model.Appointment;
 import br.gustavoakira.barber.repository.AppointmentRepository;
 import br.gustavoakira.barber.service.AppointmentService;
@@ -20,7 +21,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment getAppointment(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(()->new ResourceNotFoundException("Appointment not found with id = "+ id));
     }
 
     @Override

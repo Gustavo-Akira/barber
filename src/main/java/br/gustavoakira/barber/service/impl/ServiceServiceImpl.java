@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.service.impl;
 
+import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import br.gustavoakira.barber.model.Service;
 import br.gustavoakira.barber.repository.ServiceRepository;
 import br.gustavoakira.barber.service.ServiceService;
@@ -20,7 +21,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Service getService(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(()->new ResourceNotFoundException("Service not found with id = "+id));
     }
 
     @Override

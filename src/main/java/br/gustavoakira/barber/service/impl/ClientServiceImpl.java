@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.service.impl;
 
+import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import br.gustavoakira.barber.model.Client;
 import br.gustavoakira.barber.repository.ClientRepository;
 import br.gustavoakira.barber.service.ClientService;
@@ -20,7 +21,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClient(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Client not found with id = "+id));
     }
 
     @Override

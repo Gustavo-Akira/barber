@@ -1,6 +1,8 @@
 package br.gustavoakira.barber.model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,12 +20,15 @@ public class Appointment {
     private LocalDateTime date;
 
     @ManyToOne
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Client client;
 
     @ManyToOne
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Barber barber;
 
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Service> service;
 
     public Double getTotal(){
