@@ -1,29 +1,27 @@
 package br.gustavoakira.barber.controller;
 
 import br.gustavoakira.barber.model.Client;
-import br.gustavoakira.barber.service.ClientService;
+import br.gustavoakira.barber.security.JWTTokenAuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@WebMvcTest(ClientController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
-class ClientControllerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class ClientControllerTest {
     private Client client = new Client();
     private String json;
+    private String token;
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,25 +29,36 @@ class ClientControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @MockBean
-    private ClientService service;
+    @Autowired
+    private JWTTokenAuthenticationService service;
 
-    @BeforeEach
+    @Autowired
+    private ControllerTestsUtils utils;
+
+    @BeforeAll
     void setUp() throws JsonProcessingException {
+        utils.setup();
+
         client.setId(1L);
         client.setName("Gustavo Akira Uekita");
         json = mapper.writeValueAsString(client);
+
+
+        token = service.createToken("akirinha");
+        token = token.replace("Bearer","");
+
     }
 
     @Test
     void getClientsTest() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/clients"))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/clients")
+                .header("Authorization",token))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void getClientTest() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/client/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/client/1").header("Authorization",token))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -57,22 +66,26 @@ class ClientControllerTest {
     void saveClientTest() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/client")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
+                        .header("Authorization",token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
         ).andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     void updateClientTest() throws Exception{
         mockMvc.perform(
-          MockMvcRequestBuilders.put("/api/v1/client/1")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(json)
-        );
+                MockMvcRequestBuilders.put("/api/v1/client/1")
+                        .header("Authorization",token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void removeClientTest() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/client/1")).andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/client/1").header("Authorization",token)).andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+
 }

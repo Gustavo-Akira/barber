@@ -1,27 +1,25 @@
 package br.gustavoakira.barber.controller;
 
 import br.gustavoakira.barber.model.Service;
-import br.gustavoakira.barber.service.ServiceService;
+import br.gustavoakira.barber.security.JWTTokenAuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@WebMvcTest(ServiceController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
-class ServiceControllerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class ServiceControllerTest {
     private Service service = new Service();
 
     @Autowired
@@ -30,17 +28,26 @@ class ServiceControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private JWTTokenAuthenticationService jwtTokenAuthenticationService;
+
+    @Autowired
+    private ControllerTestsUtils utils;
+
     private String json;
 
-    @MockBean
-    private ServiceService serviceService;
+    private String token = "";
 
-    @BeforeEach
+    @BeforeAll
     void setUp() throws JsonProcessingException {
+        utils.setup();
         service.setName("Cut");
         service.setValue(20.00);
         service.setId(1L);
         json = mapper.writeValueAsString(service);
+
+        token = jwtTokenAuthenticationService.createToken("akirinha");
+        token = token.replace("Bearer","");
     }
 
 
@@ -54,8 +61,8 @@ class ServiceControllerTest {
     @Test
     void getServiceTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/service/1"))
-        .andDo(MockMvcResultHandlers.print())
-        .andExpect(MockMvcResultMatchers.status().isOk());
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
@@ -63,8 +70,8 @@ class ServiceControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/service")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
         ).andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
