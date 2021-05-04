@@ -1,6 +1,7 @@
 package br.gustavoakira.barber.security;
 
 import br.gustavoakira.barber.config.ApplicationContextLoad;
+import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.repository.BarberRepository;
 import io.jsonwebtoken.Jwts;
@@ -51,9 +52,8 @@ public class JWTTokenAuthenticationService {
         if(token != null){
             String username = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX,"")).getBody().getSubject();
             if(username != null){
-                Barber barber = ApplicationContextLoad.getApplicationContext().getBean(BarberRepository.class).getBarberByUsername(username).get();
+                Barber barber = ApplicationContextLoad.getApplicationContext().getBean(BarberRepository.class).getBarberByUsername(username).orElseThrow(()->new ResourceNotFoundException("Barber with "+username+"doesn't exist"));
                 if(barber != null){
-                    System.out.println(barber.getRoles());
                     return new UsernamePasswordAuthenticationToken(barber.getUsername(),barber.getPassword(), barber.getRoles());
                 }
             }

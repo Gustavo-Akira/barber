@@ -23,7 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/api/v1/barber").permitAll()
+                .antMatchers("/console/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.POST,"/api/v1/barber").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable()
@@ -33,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JWTLoginFilter("/login",authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTApiAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         ;
+        http.headers().frameOptions().disable();
     }
 
     @Override

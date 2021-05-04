@@ -3,6 +3,7 @@ package br.gustavoakira.barber;
 import br.gustavoakira.barber.controller.AppointmentController;
 import br.gustavoakira.barber.controller.ClientController;
 import br.gustavoakira.barber.controller.ServiceController;
+import br.gustavoakira.barber.security.JWTTokenAuthenticationService;
 import br.gustavoakira.barber.service.AppointmentService;
 import br.gustavoakira.barber.service.ClientService;
 import br.gustavoakira.barber.service.ServiceService;
@@ -35,11 +36,22 @@ class BarberApplicationTests {
 	@MockBean
 	private AppointmentService appointmentService;
 
+	@Autowired
+	private JWTTokenAuthenticationService service;
+
 	@Test
 	void contextLoads() {
 		assertNotNull(serviceController);
 		assertNotNull(clientController);
 		assertNotNull(appointmentController);
+	}
+
+	@Test
+	void shouldGenerateAuthToken() throws Exception{
+
+		String token = service.createToken("akira");
+		assertNotNull(token);
+
 	}
 
 }

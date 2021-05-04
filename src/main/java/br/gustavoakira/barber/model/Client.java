@@ -1,6 +1,8 @@
 package br.gustavoakira.barber.model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -20,8 +22,10 @@ public class Client {
     private String name;
 
     @OneToMany(mappedBy = "client")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Appointment> appointment;
 
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Barber> barber;
 }
