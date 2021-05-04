@@ -21,7 +21,6 @@ public class Service {
     private String name;
 
     @NotNull
-    @NotEmpty
     private Double value;
 
     @ManyToMany

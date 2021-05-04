@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.service;
 
+import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.model.Client;
 import br.gustavoakira.barber.repository.ClientRepository;
 import br.gustavoakira.barber.service.impl.ClientServiceImpl;
@@ -51,7 +52,7 @@ class ClientServiceTest {
 
     @Test
     void getAllClients() {
-        assertEquals(clients,service.getAllClients());
+        assertEquals(clients,service.getAllClients(new Barber()));
     }
 
     @Test

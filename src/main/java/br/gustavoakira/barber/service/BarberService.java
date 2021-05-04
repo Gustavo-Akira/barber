@@ -12,4 +12,5 @@ public interface BarberService {
     Barber saveBarber(Barber barber);
     Barber updateBarber(Long id,Barber barber);
     Barber removeBarber(Long id);
+    Barber getBarberByUsername(String username);
 }

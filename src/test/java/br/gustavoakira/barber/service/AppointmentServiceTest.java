@@ -50,7 +50,7 @@ class AppointmentServiceTest {
 
     @Test
     void getAllAppointments() {
-        assertEquals(appointments,service.getAllAppointments());
+        assertEquals(appointments,service.getAllAppointments(appointment.getBarber()));
     }
 
     @Test

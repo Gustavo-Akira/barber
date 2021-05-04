@@ -2,12 +2,15 @@ package br.gustavoakira.barber.service.impl;
 
 import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import br.gustavoakira.barber.model.Appointment;
+import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.repository.AppointmentRepository;
 import br.gustavoakira.barber.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
@@ -15,8 +18,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentRepository repository;
 
     @Override
-    public List<Appointment> getAllAppointments() {
-        return repository.findAll();
+    public List<Appointment> getAllAppointments(Barber barber) {
+        List<Appointment> appointments = repository.findAll();
+        if(!appointments.isEmpty()) {
+            return appointments.stream().filter(x -> x.getBarber().equals(barber)).collect(Collectors.toList());
+        }else{
+            return null;
+        }
     }
 
     @Override

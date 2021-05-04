@@ -1,6 +1,7 @@
 package br.gustavoakira.barber.controller;
 
 import br.gustavoakira.barber.exception.ErrorMessage;
+import br.gustavoakira.barber.exception.ForbiddenActionException;
 import br.gustavoakira.barber.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +35,18 @@ public class GlobalControllerAdvice {
                 ex.getMessage(),
                 request.getDescription(false));
 
+        return message;
+    }
+
+    @ExceptionHandler({ForbiddenActionException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorMessage globalExceptionHandlerForbiddenException(ForbiddenActionException ex, WebRequest request){
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.FORBIDDEN.value(),
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
         return message;
     }
 }

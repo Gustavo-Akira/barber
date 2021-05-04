@@ -51,6 +51,11 @@ public class BarberServiceImpl implements BarberService {
     }
 
     @Override
+    public Barber getBarberByUsername(String username) {
+        return repository.getBarberByUsername(username).orElseThrow(()->new ResourceNotFoundException("Barber with username " + username + "not found"));
+    }
+
+    @Override
     public Barber removeBarber(Long id) {
         Barber barber = getBarber(id);
         repository.delete(barber);

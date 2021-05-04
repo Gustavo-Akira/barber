@@ -10,4 +10,5 @@ public interface ServiceService {
     Service createNewService(Service service);
     Service updateService(Long id,Service service);
     Service deleteService(Long id);
+    Service exists(String name);
 }

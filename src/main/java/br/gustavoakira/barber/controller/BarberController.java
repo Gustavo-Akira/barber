@@ -1,6 +1,8 @@
 package br.gustavoakira.barber.controller;
 
 import br.gustavoakira.barber.controller.annotations.BaseController;
+import br.gustavoakira.barber.controller.utils.LoginUtils;
+import br.gustavoakira.barber.exception.ForbiddenActionException;
 import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.service.BarberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class BarberController {
     @Autowired
     private BarberService service;
 
+    @Autowired
+    private LoginUtils utils;
+
     @GetMapping("barbers")
     public ResponseEntity<List<Barber>> getBarbers(){
         return ResponseEntity.ok(service.getBarbers());
@@ -22,7 +27,11 @@ public class BarberController {
 
     @GetMapping("barber/{id}")
     public ResponseEntity<Barber> getBarber(@PathVariable Long id){
-        return ResponseEntity.ok(service.getBarber(id));
+        Barber barber = service.getBarber(id);
+        if(!barber.equals(utils.getLoggedUser())){
+            throw new ForbiddenActionException("You cant see a different barber information");
+        }
+        return ResponseEntity.ok(barber);
     }
 
     @PostMapping("barber")
@@ -32,11 +41,17 @@ public class BarberController {
 
     @PutMapping("barber/{id}")
     public ResponseEntity<Barber> updateBarber(@PathVariable Long id, @RequestBody Barber barber){
+        if(!service.getBarber(id).equals(utils.getLoggedUser())){
+            throw new ForbiddenActionException("You cant see a different barber information");
+        }
         return ResponseEntity.ok(service.updateBarber(id,barber));
     }
 
     @DeleteMapping("barber/{id}")
     public ResponseEntity<Barber> deleteBarber(@PathVariable Long id){
+        if(!service.getBarber(id).equals(utils.getLoggedUser())){
+            throw new ForbiddenActionException("You cant see a different barber information");
+        }
         return ResponseEntity.ok(service.removeBarber(id));
     }
 }

@@ -32,7 +32,7 @@ public class Barber implements UserDetails {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Service> service = new ArrayList<>();
 
-    @ManyToMany
+    @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Client> clients = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class Barber implements UserDetails {
     @NotEmpty
     private String username;
 
-    @NotNull
+    @NotNull(message = "password can´t be null")
     @NotEmpty
     private String password;
 

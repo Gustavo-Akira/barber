@@ -42,4 +42,10 @@ public class ServiceServiceImpl implements ServiceService {
         repository.delete(old);
         return old;
     }
+
+    @Override
+    public Service exists(String name) {
+        Service service = getAllService().stream().filter(x->x.getName().equals(name)).findFirst().orElse(null);
+        return service;
+    }
 }

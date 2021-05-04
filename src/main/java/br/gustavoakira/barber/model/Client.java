@@ -25,7 +25,7 @@ public class Client {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Appointment> appointment;
 
-    @ManyToMany
+    @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Barber> barber;
+    private Barber barber;
 }

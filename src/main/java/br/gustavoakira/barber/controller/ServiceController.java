@@ -1,6 +1,8 @@
 package br.gustavoakira.barber.controller;
 
 import br.gustavoakira.barber.controller.annotations.BaseController;
+import br.gustavoakira.barber.controller.utils.LoginUtils;
+import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.model.Service;
 import br.gustavoakira.barber.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @BaseController
 public class ServiceController {
     @Autowired
     private ServiceService serviceService;
+
+    @Autowired
+    private LoginUtils utils;
 
     @GetMapping("services")
     public ResponseEntity<List<Service>> getService() {
@@ -27,6 +34,16 @@ public class ServiceController {
 
     @PostMapping("service")
     public ResponseEntity<Service> saveService(@RequestBody Service service){
+        List<Barber> barbers = new ArrayList<>();
+        Service old = serviceService.exists(service.getName().toLowerCase(Locale.ROOT));
+        if(old == null){
+            barbers.add(utils.getLoggedUser());
+        }else{
+            service.setId(old.getId());
+            barbers = old.getBarbers();
+            barbers.add(utils.getLoggedUser());
+        }
+        service.setBarbers(barbers);
         return ResponseEntity.status(HttpStatus.CREATED).body(serviceService.createNewService(service));
     }
 
