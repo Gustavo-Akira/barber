@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.controller;
 
+import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.model.Client;
 import br.gustavoakira.barber.security.JWTTokenAuthenticationService;
 import com.fasterxml.jackson.core.JsonProcessingException;

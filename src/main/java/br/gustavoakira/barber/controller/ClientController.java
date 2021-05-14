@@ -45,8 +45,11 @@ public class ClientController {
 
     @PutMapping("client/{id}")
     public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client){
-        if(!client.getBarber().equals(utils.getLoggedUser())){
-            throw new ForbiddenActionException("This client is not yours");
+        System.out.println(client);
+        if(client.getBarber() != null) {
+            if (!client.getBarber().equals(utils.getLoggedUser())) {
+                throw new ForbiddenActionException("This client is not yours");
+            }
         }
         return ResponseEntity.ok(service.updateClient(id, client));
     }

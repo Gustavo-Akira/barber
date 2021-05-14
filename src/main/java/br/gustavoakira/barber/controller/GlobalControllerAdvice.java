@@ -34,7 +34,7 @@ public class GlobalControllerAdvice {
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
-
+        ex.printStackTrace();
         return message;
     }
 

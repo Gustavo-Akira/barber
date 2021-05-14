@@ -53,14 +53,14 @@ public class ServiceControllerTest {
 
     @Test
     void getAllServicesTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/services"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/services").header("Authorization",token))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void getServiceTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/service/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/service/1").header("Authorization",token))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -70,6 +70,7 @@ public class ServiceControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/service")
+                        .header("Authorization",token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
         ).andExpect(MockMvcResultMatchers.status().isCreated());
@@ -79,6 +80,7 @@ public class ServiceControllerTest {
     void updateServiceTest() throws Exception{
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/v1/service/1")
+                        .header("Authorization",token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
         ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -87,7 +89,7 @@ public class ServiceControllerTest {
     @Test
     void removeServiceTest()  throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/v1/service/1")
+                MockMvcRequestBuilders.delete("/api/v1/service/1").header("Authorization",token)
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

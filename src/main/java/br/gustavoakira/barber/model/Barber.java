@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -26,6 +27,7 @@ public class Barber implements UserDetails {
 
     @OneToMany(mappedBy = "barber")
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     private List<Appointment> appointments;
 
     @ManyToMany()

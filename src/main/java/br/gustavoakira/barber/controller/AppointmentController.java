@@ -55,9 +55,11 @@ public class AppointmentController {
     }
 
     @DeleteMapping("appointment/{id}")
-    public ResponseEntity<Appointment> removeAppointment(@PathVariable Long id){
-        if (!service.getAppointment(id).getBarber().equals(utils.getLoggedUser())){
-            throw new ForbiddenActionException("This appointment is not yours");
+    public ResponseEntity<Appointment> removeAppointment(@PathVariable("id") Long id){
+        if(service.getAppointment(id) != null) {
+            if (service.getAppointment(id).getBarber() != null && !service.getAppointment(id).getBarber().equals(utils.getLoggedUser())) {
+                throw new ForbiddenActionException("This appointment is not yours");
+            }
         }
         return ResponseEntity.ok(service.removeAppointment(id));
     }
