@@ -2,6 +2,7 @@ package br.gustavoakira.barber.controller;
 
 import br.gustavoakira.barber.controller.annotations.BaseController;
 import br.gustavoakira.barber.controller.utils.LoginUtils;
+import br.gustavoakira.barber.dto.AvailableResponse;
 import br.gustavoakira.barber.exception.ForbiddenActionException;
 import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.service.BarberService;
@@ -19,6 +20,7 @@ public class BarberController {
 
     @Autowired
     private LoginUtils utils;
+
 
     @GetMapping("barbers")
     public ResponseEntity<List<Barber>> getBarbers(){
@@ -53,5 +55,12 @@ public class BarberController {
             throw new ForbiddenActionException("You cant see a different barber information");
         }
         return ResponseEntity.ok(service.removeBarber(id));
+    }
+
+    @PostMapping("barber/username/available")
+    public ResponseEntity<AvailableResponse> isUsernameAvailable(@RequestBody String username){
+        AvailableResponse availableResponse = new AvailableResponse();
+        availableResponse.setAvailable(service.isUsernameAvailable(username));
+        return ResponseEntity.ok(availableResponse);
     }
 }

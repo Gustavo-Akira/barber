@@ -13,4 +13,6 @@ public interface BarberService {
     Barber updateBarber(Long id,Barber barber);
     Barber removeBarber(Long id);
     Barber getBarberByUsername(String username);
+
+    boolean isUsernameAvailable(String username);
 }

@@ -56,6 +56,14 @@ public class BarberServiceImpl implements BarberService {
     }
 
     @Override
+    public boolean isUsernameAvailable(String username) {
+        if(repository.getBarberByUsername(username).isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Barber removeBarber(Long id) {
         Barber barber = getBarber(id);
         repository.delete(barber);
