@@ -27,13 +27,27 @@ public class BarberController {
         return ResponseEntity.ok(service.getBarbers());
     }
 
-    @GetMapping("barber/{id}")
-    public ResponseEntity<Barber> getBarber(@PathVariable Long id){
-        Barber barber = service.getBarber(id);
-        if(!barber.equals(utils.getLoggedUser())){
-            throw new ForbiddenActionException("You cant see a different barber information");
+    @GetMapping("barber/username/{username}")
+    public ResponseEntity<Barber> getBarberByUsername(@PathVariable String username){
+        Barber searched = service.getBarberByUsername(username);
+        if(!searched.equals(utils.getLoggedUser())){
+            throw new ForbiddenActionException("You cannot get another barber information");
         }
-        return ResponseEntity.ok(barber);
+        return ResponseEntity.ok(searched);
+    }
+
+    @GetMapping("barber/id/{id}")
+    public ResponseEntity<Barber> getBarber(@PathVariable Long id){
+        Barber searched = service.getBarber(id);
+        if(!searched.equals(utils.getLoggedUser())){
+            throw new ForbiddenActionException("You cannot get another barber information");
+        }
+        return ResponseEntity.ok(searched);
+    }
+
+    @GetMapping("barber/self")
+    public ResponseEntity<Barber> getSelf(){
+        return ResponseEntity.ok(utils.getLoggedUser());
     }
 
     @PostMapping("barber")
