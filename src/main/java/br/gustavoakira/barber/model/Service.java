@@ -29,7 +29,7 @@ public class Service {
     @JsonIgnore
     private List<Appointment> appointment;
 
-    @ManyToMany
+    @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Barber> barbers;
+    private Barber barber;
 }

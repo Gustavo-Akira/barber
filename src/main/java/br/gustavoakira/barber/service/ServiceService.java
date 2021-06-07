@@ -1,5 +1,6 @@
 package br.gustavoakira.barber.service;
 
+import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.model.Service;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface ServiceService {
     Service createNewService(Service service);
     Service updateService(Long id,Service service);
     Service deleteService(Long id);
-    Service exists(String name);
+    Service exists(String name, Barber barber);
 }

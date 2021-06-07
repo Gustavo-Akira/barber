@@ -1,6 +1,7 @@
 package br.gustavoakira.barber.service.impl;
 
 import br.gustavoakira.barber.exception.ResourceNotFoundException;
+import br.gustavoakira.barber.model.Barber;
 import br.gustavoakira.barber.model.Service;
 import br.gustavoakira.barber.repository.ServiceRepository;
 import br.gustavoakira.barber.service.ServiceService;
@@ -44,8 +45,11 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Service exists(String name) {
+    public Service exists(String name, Barber barber) {
         Service service = getAllService().stream().filter(x->x.getName().equals(name)).findFirst().orElse(null);
-        return service;
+        if(service.getBarber().equals(barber)) {
+            return  service;
+        }
+        return null;
     }
 }

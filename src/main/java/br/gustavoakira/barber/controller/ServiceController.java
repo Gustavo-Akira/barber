@@ -34,16 +34,8 @@ public class ServiceController {
 
     @PostMapping("service")
     public ResponseEntity<Service> saveService(@RequestBody Service service){
-        List<Barber> barbers = new ArrayList<>();
-        Service old = serviceService.exists(service.getName().toLowerCase(Locale.ROOT));
-        if(old == null){
-            barbers.add(utils.getLoggedUser());
-        }else{
-            service.setId(old.getId());
-            barbers = old.getBarbers();
-            barbers.add(utils.getLoggedUser());
-        }
-        service.setBarbers(barbers);
+        service.setBarber(utils.getLoggedUser());
+        serviceService.createNewService(service);
         return ResponseEntity.status(HttpStatus.CREATED).body(serviceService.createNewService(service));
     }
 

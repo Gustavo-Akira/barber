@@ -32,7 +32,7 @@ public class Barber implements UserDetails {
     @JsonIgnore
     private List<Appointment> appointments;
 
-    @ManyToMany()
+    @OneToMany()
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Service> service = new ArrayList<>();
 
