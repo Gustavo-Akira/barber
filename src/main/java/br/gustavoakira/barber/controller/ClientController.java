@@ -8,6 +8,10 @@ import br.gustavoakira.barber.model.Client;
 import br.gustavoakira.barber.service.BarberService;
 import br.gustavoakira.barber.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +27,10 @@ public class ClientController {
     @Autowired
     private LoginUtils utils;
 
-    @GetMapping("clients")
-    public ResponseEntity<List<Client>> getClients(){
-        return ResponseEntity.ok(service.getAllClients(utils.getLoggedUser()));
+    @GetMapping("clients/{page}")
+    public ResponseEntity<Page<Client>> getClients(@PathVariable("page") int page){
+        Pageable pageable = PageRequest.of(page,5);
+        return ResponseEntity.ok(service.getAllClients(utils.getLoggedUser(),pageable));
     }
 
     @GetMapping("client/{id}")
@@ -45,12 +50,12 @@ public class ClientController {
 
     @PutMapping("client/{id}")
     public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client){
-        System.out.println(client);
         if(client.getBarber() != null) {
             if (!client.getBarber().equals(utils.getLoggedUser())) {
                 throw new ForbiddenActionException("This client is not yours");
             }
         }
+        client.setBarber(utils.getLoggedUser());
         return ResponseEntity.ok(service.updateClient(id, client));
     }
 

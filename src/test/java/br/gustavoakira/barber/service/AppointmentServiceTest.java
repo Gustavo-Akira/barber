@@ -13,15 +13,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith({SpringExtension.class})
 class AppointmentServiceTest {
-    private LocalDateTime dateTime = LocalDateTime.now();
+    private Date dateTime = Date.from(Instant.now());
     private Appointment appointment = new Appointment();
     private List<Appointment> appointments = new ArrayList<Appointment>();
     @BeforeEach

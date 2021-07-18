@@ -46,7 +46,9 @@ public class BarberServiceImpl implements BarberService {
         old.setName(barber.getName());
         old.setColor(barber.getColor());
         old.setUsername(barber.getUsername());
-        old.setPassword(barber.getPassword());
+        if(!barber.getPassword().isEmpty()){
+            old.setPassword(barber.getPassword());
+        }
         return repository.save(old);
     }
 

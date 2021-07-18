@@ -26,8 +26,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,7 +69,7 @@ class AppointmentControllerTest {
 
         utils.setup();
 
-        appointment.setDate(LocalDateTime.now());
+        appointment.setDate(Date.from(Instant.now()));
         appointment.setService(new ArrayList<>());
         json = mapper.writeValueAsString(appointment);
 

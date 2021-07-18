@@ -6,6 +6,8 @@ import br.gustavoakira.barber.model.Client;
 import br.gustavoakira.barber.repository.ClientRepository;
 import br.gustavoakira.barber.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +20,9 @@ public class ClientServiceImpl implements ClientService {
     private ClientRepository repository;
 
     @Override
-    public List<Client> getAllClients(Barber barber) {
-        List<Client> clients = repository.findAll();
-        if(!clients.isEmpty()) {
-            return clients.stream().filter(x -> x.getBarber() == barber).collect(Collectors.toList());
-        }else{
-            return null;
-        }
+    public Page<Client> getAllClients(Barber barber, Pageable pageable) {
+        Page<Client> clients = repository.getClientsByUser(barber, pageable);
+        return clients;
     }
 
     @Override
